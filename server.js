@@ -27,4 +27,30 @@ app.get('/connect', function(req, res) {
     res.render('pages/connect');
 });
 
+var TwitterPosts, streamOfTweets;
+TwitterPosts = require('twitter-screen-scrape');
+ 
+streamOfTweets = new TwitterPosts({
+  username: 'realDonaldTrump',
+  retweets: false
+});
+ 
+streamOfTweets.on('readable', function() {
+  var time, tweet;
+  tweet = streamOfTweets.read();
+  time = new Date(tweet.time * 1000);
+  console.log([
+    "drumpf's tweet from ",
+    time.toLocaleDateString(),
+    " got ",
+    tweet.favorite,
+    " favorites, ",
+    tweet.reply,
+    " replies, and ",
+    tweet.retweet,
+    " retweets...",
+    tweet.text
+  ].join(''));
+});
+
 //app.listen(8000);
